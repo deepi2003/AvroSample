@@ -1,6 +1,5 @@
 package com.deepti.kafka.sample;
 
-import com.deepti.kafka.sample.avro.User;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.Serdes;
@@ -18,8 +17,10 @@ public class AvroProcessing {
     private static final String APPLICATION_ID = "kafka-stream-sample-avro";
     private static final String CLIENT_ID = "kafka-stream-sample-avro";
 
-    public static void main(final String[] args) {
-        final String bootstrapServers = args.length > 0 ? args[0] : "http://localhost:9092";
+    public static void startProcessing() {
+
+        System.out.println(" Processing started");
+        final String bootstrapServers = "http://localhost:9092";
         final KafkaStreams streams = new KafkaStreams(getTopology(), streamsConfig(bootstrapServers, "/tmp/kafka-streams"));
         streams.cleanUp();
         streams.start();
@@ -30,11 +31,11 @@ public class AvroProcessing {
 
     private static void userMessageProducer(String bootstrapServers) {
         Producer<String, User> producer = createUserProducer(bootstrapServers);
-        produceRecord(producer, User.newBuilder().setName("John").setFavoriteNumber(10).setFavoriteColor("Red").build());
+        produceRecord(producer, User.newBuilder().setName("John").setFavoriteColor("Red").build());
         produceRecord(producer, User.newBuilder().setName("Jay").setFavoriteColor("Red").setFavoriteNumber(15).build());
-        produceRecord(producer, User.newBuilder().setName("Mary").setFavoriteNumber(5).setFavoriteColor("Red").build());
-        produceRecord(producer, User.newBuilder().setName("Mary").setFavoriteNumber(5).setFavoriteColor("Red").build());
-        produceRecord(producer, User.newBuilder().setName("John").setFavoriteNumber(5).setFavoriteColor("Red").build());
+        produceRecord(producer, User.newBuilder().setName("Mary").build());
+        produceRecord(producer, User.newBuilder().setName("Phil").setFavoriteNumber(5).setFavoriteColor("Red").build());
+        produceRecord(producer, User.newBuilder().setName("Jack").setFavoriteNumber(5).setFavoriteColor("Red").build());
     }
 
 

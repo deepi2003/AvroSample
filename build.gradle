@@ -1,0 +1,52 @@
+import com.commercehub.gradle.plugin.avro.GenerateAvroJavaTask
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.commercehub.gradle.plugin:gradle-avro-plugin:0.20.0"
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
+//    maven {
+//        url = uri('http://repo.maven.apache.org/maven2')
+//    }
+}
+
+
+tasks.register("generateAvro", GenerateAvroJavaTask) {
+    source("src/main/resources/avro/user.avsc")
+    outputDir = file("src/main/java/")
+}
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter-web:2.3.3.RELEASE'){
+        exclude group:'ch.qos.logback'//logback-classic:1.2.3'
+    }
+    implementation 'org.apache.kafka:kafka-clients:2.5.0'
+    implementation 'org.apache.kafka:kafka-streams:2.5.0'
+    implementation 'org.scala-lang:scala-library:2.12.8'
+    implementation 'org.apache.avro:avro:1.9.2'
+    implementation 'org.apache.avro:avro-maven-plugin:1.9.2'
+    implementation 'com.101tec:zkclient:0.9'
+    implementation 'org.slf4j:slf4j-log4j12:1.7.30'
+    implementation 'javax.ws.rs:javax.ws.rs-api:2.1'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.10.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.2'
+    testImplementation 'org.apache.kafka:kafka_2.12:2.5.0'
+    testImplementation 'org.apache.kafka:kafka_2.12:2.5.0'
+}
+
+group = 'com.deepti.kafka.sample.avro'
+version = '1.0-SNAPSHOT'
+sourceCompatibility = '10'
