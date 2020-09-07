@@ -1,0 +1,7 @@
+kafka:
+  connection:
+    bootstrapServer: localhost:9092
+  topic: user-avro
+applicationid: kafka-stream-sample-avro
+clientid: kafka-stream-sample-avro
+
