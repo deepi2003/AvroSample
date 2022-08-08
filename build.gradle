@@ -26,6 +26,35 @@ tasks.register("generateAvro", GenerateAvroJavaTask) {
     outputDir = file("src/main/java/")
 }
 
+
+schemaRegistry {
+    def uri = project.schemaRegistryUrl
+    println("SCHEMA_REGISTRY_URL: " + uri)
+    url = uri
+    credentials {
+        username = project.schemaRegistryUsername
+        password = project.schemaRegistryPassword
+    }
+
+    def userVersion = ".1.0"
+    def eventVersion =".1.0"
+
+    def schemas = {
+        subject('event'.concat(eventVersion), project.file('./src/main/resources/avro/event.avsc').toString(), 'AVRO')
+        subject('user'.concat(userVersion).concat('-value'), project.file('./src/main/resources/avro/user.avsc').toString(), 'AVRO')
+                .addReference('com.deepti.kafka.sample.avro.Event', 'event'.concat(eventVersion), 1)
+    }
+
+    def schemaConfigs = {
+        subject('event'.concat(eventVersion), 'BACKWARD')
+        subject('user'.concat(userVersion).concat('-value'), 'BACKWARD')
+    }
+
+    register(schemas)
+    compatibility(schemas)
+    config(schemaConfigs)
+}
+
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web:2.3.3.RELEASE'){
         exclude group:'ch.qos.logback'//logback-classic:1.2.3'
